@@ -27,9 +27,10 @@ const BottomNavigation = () => {
   };
 
   const handleCreateBrief = async (briefData: any) => {
-    // Créer des débriefings nécessite un canal spécifique
-    toast.error('Veuillez vous rendre dans un canal pour créer un débriefing');
+    // Redirige vers la page Brief pour que l'utilisateur utilise la création de brief publique
+    toast.info('Utilisez le bouton de création sur la page Brief pour publier un brief public');
     setShowBriefModal(false);
+    navigate('/brief');
   };
 
   const handleProfileClick = () => {
