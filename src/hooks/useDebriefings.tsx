@@ -178,18 +178,21 @@ export const useDebriefings = (channelId: string | null) => {
       }
 
       // Create debriefing in database
+      const debriefingInsert = {
+        title: debriefingData.title,
+        description: debriefingData.description,
+        video_url: videoUrl || null,
+        thumbnail_url: thumbnailUrl || null,
+        post_link: debriefingData.postLink || null,
+        creator_id: user.id,
+        channel_id: isPublicBrief ? null : channelId,
+        is_public: isPublicBrief,
+        likes: 0
+      };
+
       const { data, error } = await supabase
         .from('debriefings')
-        .insert({
-          title: debriefingData.title,
-          description: debriefingData.description,
-          video_url: videoUrl,
-          thumbnail_url: thumbnailUrl || null,
-          post_link: debriefingData.postLink || null,
-          creator_id: user.id,
-          channel_id: isPublicBrief ? null : channelId,
-          is_public: isPublicBrief
-        })
+        .insert(debriefingInsert)
         .select()
         .single();
 

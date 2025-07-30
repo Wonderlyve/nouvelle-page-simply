@@ -18,11 +18,8 @@ const BottomNavigation = () => {
   
   const handleCreateClick = () => {
     if (requireAuth()) {
-      if (location.pathname === '/brief') {
-        setShowBriefModal(true);
-      } else {
-        setShowCreateModal(true);
-      }
+      // Toujours rediriger vers la page Brief pour créer des briefs publics
+      navigate('/brief');
     }
   };
 
