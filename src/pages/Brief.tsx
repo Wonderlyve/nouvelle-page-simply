@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Play, Plus, Eye, Heart, ArrowLeft } from 'lucide-react';
+import { Play, Eye, Heart, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import BottomNavigation from '@/components/BottomNavigation';
 import DebriefingModal from '@/components/channel-chat/DebriefingModal';
+import LoadingModal from '@/components/LoadingModal';
+import SuccessModal from '@/components/SuccessModal';
 import { useDebriefings } from '@/hooks/useDebriefings';
 import { toast } from 'sonner';
 
 const Brief = () => {
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { debriefings, loading, createPublicBrief, fetchPublicDebriefings } = useDebriefings(null);
 
   useEffect(() => {
@@ -22,9 +26,14 @@ const Brief = () => {
   };
 
   const handleCreateBrief = async (briefData: any) => {
+    setShowCreateModal(false);
+    setShowLoadingModal(true);
+    
     const success = await createPublicBrief(briefData);
+    setShowLoadingModal(false);
+    
     if (success) {
-      setShowCreateModal(false);
+      setShowSuccessModal(true);
     }
   };
 
@@ -97,21 +106,34 @@ const Brief = () => {
                   className="cursor-pointer"
                   onClick={() => openBrief(brief.id)}
                 >
-                  {/* Thumbnail en format paysage */}
-                  <div className="relative aspect-video bg-gray-200">
-                    <img
-                      src={brief.thumbnail_url || 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400&h=225&fit=crop'}
-                      alt={brief.title}
-                      className="w-full h-full object-cover"
-                    />
+                   {/* Thumbnail en format paysage */}
+                  <div className="relative aspect-video bg-gray-900">
+                    {brief.thumbnail_url ? (
+                      <img
+                        src={brief.thumbnail_url}
+                        alt={brief.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <div className="text-center text-gray-400">
+                          <Play className="w-12 h-12 mx-auto mb-2" />
+                          <p className="text-sm font-medium">{brief.title}</p>
+                        </div>
+                      </div>
+                    )}
                     {/* Play overlay */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                       <div className="w-16 h-16 bg-black/60 rounded-full flex items-center justify-center">
                         <Play className="w-8 h-8 text-white ml-1" />
                       </div>
                     </div>
-                    {/* Stats overlay */}
+                     {/* Stats overlay */}
                     <div className="absolute bottom-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs flex items-center space-x-3">
+                      <div className="flex items-center space-x-1">
+                        <Eye className="w-3 h-3" />
+                        <span>2.3K</span>
+                      </div>
                       <div className="flex items-center space-x-1">
                         <Heart className="w-3 h-3" />
                         <span>{brief.likes}</span>
@@ -147,20 +169,24 @@ const Brief = () => {
         )}
       </div>
 
-      {/* Floating Create Button */}
-      <Button
-        onClick={() => setShowCreateModal(true)}
-        className="fixed bottom-24 right-4 w-14 h-14 rounded-full shadow-lg bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 border-4 border-white z-40"
-        size="icon"
-      >
-        <Plus className="w-6 h-6" />
-      </Button>
-
-      {/* Create Brief Modal */}
+      {/* Modals */}
       <DebriefingModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleCreateBrief}
+      />
+      
+      <LoadingModal
+        isOpen={showLoadingModal}
+        title="Publication en cours..."
+        description="Votre brief est en cours de publication, veuillez patienter."
+      />
+      
+      <SuccessModal
+        isOpen={showSuccessModal}
+        title="Brief publié !"
+        description="Votre brief a été publié avec succès et est maintenant visible par tous."
+        onClose={() => setShowSuccessModal(false)}
       />
 
       <BottomNavigation />
