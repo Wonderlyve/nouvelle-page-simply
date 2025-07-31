@@ -9,6 +9,16 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import PredictionModal from './PredictionModal';
 import ProtectedComponent from './ProtectedComponent';
 import { useState, useRef, useEffect } from 'react';
@@ -98,6 +108,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [actionStatesLoaded, setActionStatesLoaded] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const hideControlsTimeout = useRef<NodeJS.Timeout>();
 
@@ -228,9 +239,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
           handleEditPost();
           break;
         case 'delete':
-          if (window.confirm('Êtes-vous sûr de vouloir supprimer ce post ?')) {
-            handleDeletePost();
-          }
+          setShowDeleteDialog(true);
           break;
         default:
           console.log(`Action: ${action} on prediction ${prediction.id}`);
@@ -745,6 +754,26 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
         </div>
       </CardContent>
       
+      {/* Dialog de confirmation de suppression */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Supprimer ce post ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Votre post sera définitivement supprimé et ne pourra pas être récupéré.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeletePost}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };
