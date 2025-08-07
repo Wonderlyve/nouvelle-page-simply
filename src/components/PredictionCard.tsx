@@ -431,7 +431,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
                 <span>{prediction.successRate}% de réussite</span>
                 <span>•</span>
                 <span className={`px-2 py-1 rounded-full ${
-                  prediction.post_type === 'news' 
+                  prediction.sport === 'News' 
                     ? 'bg-red-500 text-white' 
                     : 'bg-gray-100 text-gray-500'
                 }`}>
@@ -570,7 +570,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
             )}
           </div>
           
-          {prediction.post_type !== 'news' && (
+          {prediction.sport !== 'News' && (
             <>
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
@@ -618,7 +618,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
             </>
           )}
           
-          {prediction.post_type === 'news' && !isCurrentUser && (
+          {prediction.sport === 'News' && !isCurrentUser && (
             <div className="flex justify-end">
               <ProtectedComponent fallback={
                 <Button variant="outline" size="sm" className="h-7 px-2 text-xs opacity-50 cursor-not-allowed">
@@ -734,7 +734,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
         )}
 
         {/* Analysis */}
-        {prediction.post_type !== 'news' && (
+        {prediction.sport !== 'News' && (
           <div className="mb-4">
             <p className="text-gray-700 text-sm leading-relaxed">
               {prediction.analysis.length > 45 && !showFullText ? (
@@ -820,7 +820,7 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
             </button>
           </div>
           
-          {prediction.post_type !== 'news' && (
+          {prediction.sport !== 'News' && (
             <ProtectedComponent fallback={
               <Button className="bg-gray-400 text-white text-xs px-3 py-1 h-7 cursor-not-allowed shrink-0" size="sm" disabled>
                 Se connecter
