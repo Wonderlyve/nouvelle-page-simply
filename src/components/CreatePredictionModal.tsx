@@ -659,38 +659,42 @@ const CreatePredictionModal = ({ open, onOpenChange }: CreatePredictionModalProp
                 </div>
               )}
 
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  {betType === 'loto' ? 'Analyse de votre grille' : 'Analyse détaillée'}
-                </label>
-                <Textarea
-                  placeholder={betType === 'loto' ? 'Expliquez votre stratégie, vos numéros fétiches...' : 'Expliquez votre analyse, les statistiques, la forme des équipes...'}
-                  value={analysis}
-                  onChange={(e) => setAnalysis(e.target.value)}
-                  rows={4}
-                  className="text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Niveau de confiance: {confidence}/5
-                </label>
-                <div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setConfidence(star)}
-                      className={`text-2xl ${
-                        star <= confidence ? 'text-yellow-400' : 'text-gray-300'
-                      }`}
-                    >
-                      ⭐
-                    </button>
-                  ))}
+              {postType !== 'news' && (
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    {betType === 'loto' ? 'Analyse de votre grille' : 'Analyse détaillée'}
+                  </label>
+                  <Textarea
+                    placeholder={betType === 'loto' ? 'Expliquez votre stratégie, vos numéros fétiches...' : 'Expliquez votre analyse, les statistiques, la forme des équipes...'}
+                    value={analysis}
+                    onChange={(e) => setAnalysis(e.target.value)}
+                    rows={4}
+                    className="text-sm"
+                  />
                 </div>
-              </div>
+              )}
+
+              {postType !== 'news' && (
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">
+                    Niveau de confiance: {confidence}/5
+                  </label>
+                  <div className="flex space-x-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setConfidence(star)}
+                        className={`text-2xl ${
+                          star <= confidence ? 'text-yellow-400' : 'text-gray-300'
+                        }`}
+                      >
+                        ⭐
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <Card className="p-3">
                 <FileUpload
@@ -702,7 +706,7 @@ const CreatePredictionModal = ({ open, onOpenChange }: CreatePredictionModalProp
               </Card>
 
               {/* Code de réservation */}
-              {betType !== 'loto' && (
+              {postType !== 'news' && betType !== 'loto' && (
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-2 block">
                     Code de réservation (optionnel)
