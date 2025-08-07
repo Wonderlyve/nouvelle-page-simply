@@ -733,36 +733,34 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
           </div>
         )}
 
-        {/* Analysis */}
-        {prediction.sport !== 'News' && (
-          <div className="mb-4">
-            <p className="text-gray-700 text-sm leading-relaxed">
-              {prediction.analysis.length > 45 && !showFullText ? (
-                <>
-                  {prediction.analysis.substring(0, 45)}...{" "}
+        {/* Analysis - Afficher pour tous les posts */}
+        <div className="mb-4">
+          <p className="text-gray-700 text-sm leading-relaxed">
+            {prediction.analysis.length > 45 && !showFullText ? (
+              <>
+                {prediction.analysis.substring(0, 45)}...{" "}
+                <span 
+                  className="text-green-600 font-medium cursor-pointer hover:underline"
+                  onClick={() => setShowFullText(true)}
+                >
+                  voir plus
+                </span>
+              </>
+            ) : (
+              <>
+                {prediction.analysis}
+                {prediction.analysis.length > 45 && showFullText && (
                   <span 
-                    className="text-green-600 font-medium cursor-pointer hover:underline"
-                    onClick={() => setShowFullText(true)}
+                    className="text-green-600 font-medium cursor-pointer hover:underline ml-2"
+                    onClick={() => setShowFullText(false)}
                   >
-                    voir plus
+                    voir moins
                   </span>
-                </>
-              ) : (
-                <>
-                  {prediction.analysis}
-                  {prediction.analysis.length > 45 && showFullText && (
-                    <span 
-                      className="text-green-600 font-medium cursor-pointer hover:underline ml-2"
-                      onClick={() => setShowFullText(false)}
-                    >
-                      voir moins
-                    </span>
-                  )}
-                </>
-              )}
-            </p>
-          </div>
-        )}
+                )}
+              </>
+            )}
+          </p>
+        </div>
 
         {/* Actions */}
         <div className="flex items-center justify-between gap-2">
