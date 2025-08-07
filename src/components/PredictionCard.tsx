@@ -430,7 +430,13 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
               <div className="flex items-center space-x-2 text-xs text-gray-500">
                 <span>{prediction.successRate}% de réussite</span>
                 <span>•</span>
-                <span className="px-2 py-1 bg-gray-100 rounded-full">{prediction.sport}</span>
+                <span className={`px-2 py-1 rounded-full ${
+                  prediction.post_type === 'news' 
+                    ? 'bg-red-500 text-white' 
+                    : 'bg-gray-100 text-gray-500'
+                }`}>
+                  {prediction.sport}
+                </span>
               </div>
             </div>
           </div>
@@ -728,33 +734,35 @@ const PredictionCard = ({ prediction, onOpenModal }: PredictionCardProps) => {
         )}
 
         {/* Analysis */}
-        <div className="mb-4">
-          <p className="text-gray-700 text-sm leading-relaxed">
-            {prediction.analysis.length > 45 && !showFullText ? (
-              <>
-                {prediction.analysis.substring(0, 45)}...{" "}
-                <span 
-                  className="text-green-600 font-medium cursor-pointer hover:underline"
-                  onClick={() => setShowFullText(true)}
-                >
-                  voir plus
-                </span>
-              </>
-            ) : (
-              <>
-                {prediction.analysis}
-                {prediction.analysis.length > 45 && showFullText && (
+        {prediction.post_type !== 'news' && (
+          <div className="mb-4">
+            <p className="text-gray-700 text-sm leading-relaxed">
+              {prediction.analysis.length > 45 && !showFullText ? (
+                <>
+                  {prediction.analysis.substring(0, 45)}...{" "}
                   <span 
-                    className="text-green-600 font-medium cursor-pointer hover:underline ml-2"
-                    onClick={() => setShowFullText(false)}
+                    className="text-green-600 font-medium cursor-pointer hover:underline"
+                    onClick={() => setShowFullText(true)}
                   >
-                    voir moins
+                    voir plus
                   </span>
-                )}
-              </>
-            )}
-          </p>
-        </div>
+                </>
+              ) : (
+                <>
+                  {prediction.analysis}
+                  {prediction.analysis.length > 45 && showFullText && (
+                    <span 
+                      className="text-green-600 font-medium cursor-pointer hover:underline ml-2"
+                      onClick={() => setShowFullText(false)}
+                    >
+                      voir moins
+                    </span>
+                  )}
+                </>
+              )}
+            </p>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex items-center justify-between gap-2">
